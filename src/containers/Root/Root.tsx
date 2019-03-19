@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import './Root.css';
 import DevTools from '../DevTools/DevTools';
 import { Switch, Route } from 'react-router';
+import Leaderboard from '../../components/Leaderboard/Leaderboard';
 
 class Root extends Component {
     render() {
         return (
             <>
                 <Switch>
-                    <Route path="/" render={() => "dab"} />
+                    <Route path="/" component={Leaderboard} />
                 </Switch>
                 <DevTools />
             </>

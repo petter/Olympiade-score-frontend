@@ -1,0 +1,18 @@
+.Container {
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: var(--main-text-color);
+}
+
+.LeaderboardTitle {
+    font-size: 3rem;
+}
+
+.Rows {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    width: 900px;
+}

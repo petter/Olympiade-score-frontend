@@ -1,0 +1,32 @@
+.Row {
+    padding: .75rem 1rem;
+    border-radius: .5rem;
+    background-color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    margin-bottom: .5rem;
+}
+
+.Position {
+    width: 3rem;
+    height: 3rem;
+    font-weight: bold;
+    font-size: 1.5rem;
+    background-color: var(--secondary-text-color);
+    color: var(--secondary-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1rem;
+    text-shadow: 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.Name {
+    flex: 9;
+}
+
+.Score {
+    flex: 1;
+}
