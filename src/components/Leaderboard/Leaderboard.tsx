@@ -8,11 +8,17 @@ import { State } from '../../store/reducers';
 import { GroupState } from '../../store/reducers/groups';
 
 const Leaderboard = (props: LeaderboardProps) => {
-    let rows = <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><SyncLoader color="var(--main-text-color)" /></div>;
+    let rows = <div style={{ position: 'fixed', top: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><SyncLoader color="var(--main-text-color)" /></div>;
     if (props.groups.length !== 0) {
         const sorted = props.groups.slice().sort((a, b) => b.score - a.score);
         rows = (
-            <FlipMove typeName={null}>
+            <FlipMove
+                typeName={null}
+                maintainContainerHeight={true}
+                staggerDurationBy={50}
+                duration={350}
+                enterAnimation="accordionVertical"
+                leaveAnimation="accordionVertical">
                 {sorted.map((el, pos) => <LeaderboardRow key={el.id} data={{ ...el, position: pos + 1 }} />)}
             </FlipMove>
         );

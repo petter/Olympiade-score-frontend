@@ -24,13 +24,16 @@ class Root extends Component<RootProps> {
         socket.emit('group_request', (groups: GroupState[]) => this.props.setGroups(groups));
         this.setState({ socket: socket });
 
+        // Simulate scores
+        setInterval(() => this.props.addScore(Math.floor(Math.random() * 60).toString(), 100), 1000);
+
     }
 
 
     render() {
         return (
             <>
-                <button onClick={() => this.props.addScore('0', 100)}>Score test</button>
+                <button onClick={() => this.props.addScore('9', 50)}>Score test</button>
                 <Switch>
                     <Route path="/" component={Leaderboard} />
                 </Switch>

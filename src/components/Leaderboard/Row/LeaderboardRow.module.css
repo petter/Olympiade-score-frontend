@@ -7,7 +7,6 @@
     font-size: 1rem;
     background-color: #333;
     width: 95%;
-    transition: 200ms;
 }
 
 .Row:first-child {
