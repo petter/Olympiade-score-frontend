@@ -16,7 +16,7 @@ const dummyData = dummyGroupNames.map((el, i) => {
     return { id: i.toString(), name: el, score: Math.round(Math.random() * 1000) }
 });
 
-const initialState: GroupState[] = dummyData;
+const initialState: GroupState[] = [];
 
 const changeField = (object: GroupState, field: string, value: any): GroupState => {
     return {
@@ -33,6 +33,8 @@ const reducer = (state = initialState, action: GroupActions) => {
     switch (action.type) {
         case 'group/setName':
             return changeFieldInArrayEntry(state, action.payload.id, 'name', action.payload.value);
+        case 'group/setGroups':
+            return action.payload;
         default:
             return state;
     }

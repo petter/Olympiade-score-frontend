@@ -1,18 +1,41 @@
 .Row {
-    padding: .75rem 1rem;
+    padding: .5rem 1rem;
     border-radius: .5rem;
-    background-color: var(--secondary-color);
     display: flex;
     align-items: center;
-    font-size: 1.5rem;
     margin-bottom: .5rem;
+    font-size: 1rem;
+    background-color: #333;
+    width: 95%;
 }
 
-.Position {
+.Row:first-child {
+    border: 2px solid var(--secondary-text);
+}
+
+.Row:nth-child(1),
+.Row:nth-child(2),
+.Row:nth-child(3) {
+    padding: 1rem;
+    font-size: 1.5rem;
+    background-color: var(--secondary-color);
+    width: 100%;
+}
+
+
+.Row:nth-child(1) .Position,
+.Row:nth-child(2) .Position,
+.Row:nth-child(3) .Position {
     width: 3rem;
     height: 3rem;
-    font-weight: bold;
     font-size: 1.5rem;
+}   
+
+.Position {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+    font-weight: bold;
     background-color: var(--secondary-text-color);
     color: var(--secondary-color);
     border-radius: 50%;
