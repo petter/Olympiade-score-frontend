@@ -30,6 +30,7 @@ class Root extends Component<RootProps> {
     render() {
         return (
             <>
+                <button onClick={() => this.props.addScore('0', 100)}>Score test</button>
                 <Switch>
                     <Route path="/" component={Leaderboard} />
                 </Switch>
@@ -41,6 +42,8 @@ class Root extends Component<RootProps> {
 
 interface RootProps {
     setGroups(groups: GroupState[]): void;
+    setScore(id: string, value: number): void;
+    addScore(id: string, value: number): void;
     groups: GroupState[];
 }
 
@@ -53,6 +56,8 @@ const mapStateToProps = (state: State) => {
 const mapDispatchToProps = (dispatch: Function) => {
     return {
         setGroups: (groups: GroupState[]) => dispatch(groupActions.setGroups(groups)),
+        setScore: (id: string, value: number) => dispatch(groupActions.setScore({ id: id, value: value })),
+        addScore: (id: string, value: number) => dispatch(groupActions.addScore({ id: id, value: value })),
     }
 }
 
