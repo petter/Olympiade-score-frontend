@@ -1,6 +1,6 @@
-import React, { Component, Dispatch } from 'react';
+import React, { Component, Suspense } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router';
+import { Switch, Route, Link, RouteComponentProps } from 'react-router-dom';
 import io from 'socket.io-client';
 
 import { State } from '../../store/reducers';
@@ -9,6 +9,9 @@ import DevTools from '../DevTools/DevTools';
 import Leaderboard from '../../components/Leaderboard/Leaderboard';
 import './Root.css';
 import { GroupState } from '../../store/reducers/groups';
+import RouteWithSubRoutes from '../../hoc/RouteWithSubRoutes/RouteWithSubRoutes';
+
+const GroupView = React.lazy(() => import('../../components/GroupView/GroupView'));
 
 class Root extends Component<RootProps> {
 
@@ -25,17 +28,38 @@ class Root extends Component<RootProps> {
         this.setState({ socket: socket });
 
         // Simulate scores
-        setInterval(() => this.props.addScore(Math.floor(Math.random() * 60).toString(), 100), 1000);
+        // setInterval(() => this.props.addScore(Math.floor(Math.random() * 60).toString(), 100), 1000);
 
     }
 
 
+
     render() {
+
+        const routes = [
+            {
+                path: '/group/:id',
+                component: GroupView,
+                async: true,
+                exact: true,
+            },
+            {
+                path: '/',
+                component: Leaderboard,
+                exact: true,
+            },
+        ]
+
         return (
             <>
-                <button onClick={() => this.props.addScore('9', 50)}>Score test</button>
+                <Link to="/">Home</Link>
+                <Link to="/group/P1">P1</Link>
                 <Switch>
-                    <Route path="/" component={Leaderboard} />
+                    {routes.map((el, i) => {
+                        return (
+                            <RouteWithSubRoutes key={i} {...el} />
+                        );
+                    })}>
                 </Switch>
                 <DevTools />
             </>

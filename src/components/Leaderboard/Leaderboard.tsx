@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux';
 import FlipMove from 'react-flip-move';
 import { SyncLoader } from 'react-spinners';
@@ -6,17 +6,19 @@ import styles from './Leaderboard.module.css';
 import LeaderboardRow from './Row/LeaderboardRow';
 import { State } from '../../store/reducers';
 import { GroupState } from '../../store/reducers/groups';
+import DefaultLoader from '../UI/DefaultLoader/DefaultLoader';
 
 const Leaderboard = (props: LeaderboardProps) => {
-    let rows = <div style={{ position: 'fixed', top: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><SyncLoader color="var(--main-text-color)" /></div>;
+
+    let rows = <DefaultLoader />;
     if (props.groups.length !== 0) {
         const sorted = props.groups.slice().sort((a, b) => b.score - a.score);
         rows = (
             <FlipMove
                 typeName={null}
                 maintainContainerHeight={true}
-                staggerDurationBy={50}
-                duration={350}
+                staggerDurationBy={0}
+                duration={500}
                 enterAnimation="accordionVertical"
                 leaveAnimation="accordionVertical">
                 {sorted.map((el, pos) => <LeaderboardRow key={el.id} data={{ ...el, position: pos + 1 }} />)}
