@@ -7,10 +7,11 @@ import { State } from '../../store/reducers';
 import * as groupActions from '../../store/actions/groups';
 import DevTools from '../DevTools/DevTools';
 import Leaderboard from '../../components/Leaderboard/Leaderboard';
-import './Root.css';
+import styles from './Root.module.css';
 import { GroupState } from '../../store/reducers/groups';
 import RouteWithSubRoutes from '../../hoc/RouteWithSubRoutes/RouteWithSubRoutes';
 
+const ScoreSubmission = React.lazy(() => import('../../components/ScoreSubmission/ScoreSubmission'));
 const GroupView = React.lazy(() => import('../../components/GroupView/GroupView'));
 
 class Root extends Component<RootProps> {
@@ -35,8 +36,13 @@ class Root extends Component<RootProps> {
 
 
     render() {
-
         const routes = [
+            {
+                path: '/submit',
+                component: ScoreSubmission,
+                async: true,
+                exact: true,
+            },
             {
                 path: '/group/:id',
                 component: GroupView,
@@ -52,15 +58,15 @@ class Root extends Component<RootProps> {
 
         return (
             <>
-                <Link to="/">Home</Link>
-                <Link to="/group/P1">P1</Link>
-                <Switch>
-                    {routes.map((el, i) => {
-                        return (
-                            <RouteWithSubRoutes key={i} {...el} />
-                        );
-                    })}>
+                <div className={styles.Container}>
+                    <Switch>
+                        {routes.map((el, i) => {
+                            return (
+                                <RouteWithSubRoutes key={i} {...el} />
+                            );
+                        })}>
                 </Switch>
+                </div>
                 <DevTools />
             </>
         );
