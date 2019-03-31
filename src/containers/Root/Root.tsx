@@ -24,6 +24,7 @@ class Root extends Component<RootProps> {
         const socket = io('http://localhost:8080');
         socket.on('connect', () => console.log('connected'));
         socket.on('disconnect', () => console.log('disconnected'));
+        socket.on('group_score', ({ group, points }: { group: string, points: number }) => this.props.addScore(group, points));
         // socket.emit('groups', this.props.groups); // Used to provide backend with dummydata
         socket.emit('group_request', (groups: GroupState[]) => this.props.setGroups(groups));
         this.setState({ socket: socket });

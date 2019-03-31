@@ -10,10 +10,10 @@ const RouteWithSubRoutes = (routes: RouteWithSubRoutesProps) => {
 
                 routes.async ? (
                     <Suspense fallback={<DefaultLoader />}>
-                        <routes.component {...props} />
+                        <routes.component {...props} {...routes.props} />
                     </Suspense>
                 ) : (
-                        <routes.component {...props} />
+                        <routes.component {...props} {...routes.props} />
                     )
 
             )}
@@ -28,6 +28,7 @@ interface RouteWithSubRoutesProps {
     async?: boolean;
     exact?: boolean;
     key?: number;
+    props?: object;
 
 }
 
