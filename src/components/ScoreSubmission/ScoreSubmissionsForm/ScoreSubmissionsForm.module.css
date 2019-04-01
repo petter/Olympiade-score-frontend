@@ -1,0 +1,14 @@
+.Form {
+    width: 100%;
+    
+}
+
+.Label {
+    color: var(--main-text-color);
+    font-size: 1.2em;
+}
+
+.Select {
+    width: 100%;
+    margin: 1rem 0;
+}

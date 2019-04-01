@@ -6,22 +6,12 @@
     width: 100%;
 }
 
-.Form {
-    width: 100%;
-    
-}
-
 .FormTitle {
     font-size: 2.5em;
     color: var(--main-text-color);
 }
 
-.Label {
+.Toast {
+    background-color: var(--secondary-color);
     color: var(--main-text-color);
-    font-size: 1.2em;
-}
-
-.Select {
-    width: 100%;
-    margin: 1rem 0;
 }

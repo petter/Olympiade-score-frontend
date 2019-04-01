@@ -2,6 +2,8 @@ import React, { Component, Suspense } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Link, RouteComponentProps } from 'react-router-dom';
 import io from 'socket.io-client';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { State } from '../../store/reducers';
 import * as groupActions from '../../store/actions/groups';
@@ -9,6 +11,7 @@ import DevTools from '../DevTools/DevTools';
 import Leaderboard from '../../components/Leaderboard/Leaderboard';
 import styles from './Root.module.css';
 import { GroupState } from '../../store/reducers/groups';
+
 import RouteWithSubRoutes from '../../hoc/RouteWithSubRoutes/RouteWithSubRoutes';
 
 const ScoreSubmission = React.lazy(() => import('../../components/ScoreSubmission/ScoreSubmission'));
@@ -25,7 +28,7 @@ class Root extends Component<RootProps> {
         socket.on('connect', () => console.log('connected'));
         socket.on('disconnect', () => console.log('disconnected'));
         socket.on('group_score', ({ group, points }: { group: string, points: number }) => this.props.addScore(group, points));
-        // socket.emit('groups', this.props.groups); // Used to provide backend with dummydata
+        //socket.emit('groups', this.props.groups); // Used to provide backend with dummydata
         socket.emit('group_request', (groups: GroupState[]) => this.props.setGroups(groups));
         this.setState({ socket: socket });
 
@@ -68,6 +71,8 @@ class Root extends Component<RootProps> {
                         })}>
                 </Switch>
                 </div>
+
+                <ToastContainer />
                 <DevTools />
             </>
         );

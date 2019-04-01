@@ -1,85 +1,59 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import Select from 'react-select';
 import io from 'socket.io-client';
 
 import { State } from '../../store/reducers';
-import Button from '../UI/Button/Button';
 import styles from './ScoreSubmission.module.css';
 import { GroupState } from '../../store/reducers/groups';
+import DefaultLoader from '../UI/DefaultLoader/DefaultLoader';
+import ScoreSubmissionsForm, { ScoreSubmissionsFormState } from './ScoreSubmissionsForm/ScoreSubmissionsForm';
+import { toast } from 'react-toastify';
 
 class ScoreSubmission extends Component<ScoreSubmissionProps> {
 
-
-
     state: ScoreSubmissionState = {
-        group: null,
-        points: null,
+        loading: false,
+        form: null,
     }
 
 
     onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log("Submitted");
-        if (this.state.group !== null && this.state.points !== null) {
+        if (this.state.form && this.state.form.group && this.state.form.points) {
             io('localhost:8080').emit('score_submit', {
-                group: this.state.group.value,
-                points: this.state.points.value,
+                group: this.state.form.group.value,
+                points: this.state.form.points.value,
+            }, () => {
+                toast('Score ble oppdatert!', { position: toast.POSITION.TOP_RIGHT, className: styles.Toast, hideProgressBar: true, closeButton: false });
+                this.setState({ loading: false })
             });
+            this.setState({ loading: true });
         }
 
         this.setState({ group: null, points: null });
     }
 
     validateInput = () => {
-        return this.state.group && this.state.points;
+        return this.state.form && this.state.form.group && this.state.form.points;
     }
 
     render = () => {
-        const groupOptions = this.props.groups.map(el => {
-            return {
-                value: el.id,
-                label: el.name + '(' + el.id + ')'
-            }
-        });
 
-        const pointOptions = Array.from(Array(11).keys()).map((_, i) => {
-            return {
-                value: i,
-                label: i + ' poeng'
-            }
-        });
-
+        const content = this.state.loading ?
+            (<DefaultLoader />) : (
+                <ScoreSubmissionsForm
+                    onSubmit={this.onSubmit}
+                    onChange={(value) => this.setState({ form: value })}
+                    groups={this.props.groups} />
+            );
         return (
-            <div className={styles.Container}>
-                <h1 className={styles.FormTitle}>Poeng på post</h1>
-
-                <form className={styles.Form} onSubmit={this.onSubmit}>
-                    <label className={styles.Label}>
-                        Gruppe:
-                </label>
-                    <Select
-                        options={groupOptions}
-                        className={styles.Select}
-                        value={this.state.group}
-                        onChange={(value) => this.setState({ group: value })}
-                    />
-
-
-                    <label className={styles.Label}>
-                        Poeng:
-                </label>
-                    <Select
-                        options={pointOptions}
-                        className={styles.Select}
-                        value={this.state.points}
-                        onChange={(value) => this.setState({ points: value })}
-                    />
-
-                    <Button type="submit">Submit</Button>
-                </form>
-
-            </div >
+            <>
+                <div className={styles.Container}>
+                    <h1 className={styles.FormTitle}>Poeng på post</h1>
+                    {content}
+                </div >
+            </>
         )
     }
 }
@@ -88,11 +62,9 @@ interface ScoreSubmissionProps {
     groups: GroupState[];
 }
 
-type SelectValue<T> = { value: T, label: string }
-
 interface ScoreSubmissionState {
-    group: null | SelectValue<string>;
-    points: null | SelectValue<number>;
+    loading: boolean;
+    form: ScoreSubmissionsFormState | null;
 }
 
 const mapStateToProps = (state: State) => {
