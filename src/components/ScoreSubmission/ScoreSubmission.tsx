@@ -7,7 +7,8 @@ import styles from './ScoreSubmission.module.css';
 import { GroupState } from '../../store/reducers/groups';
 import DefaultLoader from '../UI/DefaultLoader/DefaultLoader';
 import ScoreSubmissionsForm, { ScoreSubmissionsFormState } from './ScoreSubmissionsForm/ScoreSubmissionsForm';
-import { toast } from 'react-toastify';
+import toast from '../../utils/toast/toast';
+import withLogin from '../../hoc/withLogin/withLogin';
 
 class ScoreSubmission extends Component<ScoreSubmissionProps> {
 
@@ -21,11 +22,11 @@ class ScoreSubmission extends Component<ScoreSubmissionProps> {
         event.preventDefault();
         console.log("Submitted");
         if (this.state.form && this.state.form.group && this.state.form.points) {
-            io('localhost:8080').emit('score_submit', {
+            this.props.socket.emit('score_submit', {
                 group: this.state.form.group.value,
                 points: this.state.form.points.value,
             }, () => {
-                toast('Score ble oppdatert!', { position: toast.POSITION.TOP_RIGHT, className: styles.Toast, hideProgressBar: true, closeButton: false });
+                toast.success('Score ble oppdatert!');
                 this.setState({ loading: false })
             });
             this.setState({ loading: true });
@@ -60,6 +61,7 @@ class ScoreSubmission extends Component<ScoreSubmissionProps> {
 
 interface ScoreSubmissionProps {
     groups: GroupState[];
+    socket: SocketIOClient.Socket;
 }
 
 interface ScoreSubmissionState {
@@ -73,4 +75,4 @@ const mapStateToProps = (state: State) => {
     }
 }
 
-export default connect(mapStateToProps)(ScoreSubmission);
+export default withLogin(connect(mapStateToProps)(ScoreSubmission));
