@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 let url = '';
 
 if (process.env.NODE_ENV === 'production') {
-    url = 'TODO';
+    url = 'http://158.39.48.32';
 } else {
     url = 'http://localhost:8080'
 }
