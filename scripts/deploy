@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "Deploying to server"
+
+ssh ubuntu@158.39.48.32 <<EOF
+  cd Olympiade-score-frontend
+  git pull
+  yarn install
+  yarn build
+  cp -rf build ../olympiade_bakend/src/client 
+  pm2 restart all
+  exit
+EOF
