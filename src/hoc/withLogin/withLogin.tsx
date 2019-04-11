@@ -6,7 +6,7 @@ import Button from '../../components/UI/Button/Button';
 import DefaultLoader from '../../components/UI/DefaultLoader/DefaultLoader';
 
 
-const withLogin = <P extends object>(WrappedComponent: ComponentType<P>) =>
+const withLogin = <P extends object>(WrappedComponent: ComponentType<P>, socketPath = '/') =>
     class WithLogin extends Component {
 
         state = {
@@ -17,7 +17,11 @@ const withLogin = <P extends object>(WrappedComponent: ComponentType<P>) =>
         }
 
         componentDidMount = () => {
-            this.socket = io('/posts');
+            this.socket = io(socketPath);
+
+            this.socket.on('disconnect', () => {
+                this.setState({ loggedIn: false, submitted: false });
+            });
         }
 
         logIn = (event: React.FormEvent<HTMLFormElement>) => {

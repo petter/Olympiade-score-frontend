@@ -16,6 +16,7 @@ import RouteWithSubRoutes from '../../hoc/RouteWithSubRoutes/RouteWithSubRoutes'
 
 const ScoreSubmission = React.lazy(() => import('../../components/ScoreSubmission/ScoreSubmission'));
 const GroupView = React.lazy(() => import('../../components/GroupView/GroupView'));
+const AdminView = React.lazy(() => import('../../components/AdminView/AdminView'));
 
 class Root extends Component<RootProps> {
 
@@ -33,7 +34,7 @@ class Root extends Component<RootProps> {
         this.setState({ socket: socket });
 
         // Simulate scores
-        // setInterval(() => this.props.addScore(Math.floor(Math.random() * 60).toString(), 100), 1000);
+        // setInterval(() => this.props.addScore(Math.floor(Math.random() * 60).toString(), 100), 2000);
 
     }
 
@@ -46,14 +47,17 @@ class Root extends Component<RootProps> {
                 component: ScoreSubmission,
                 async: true,
                 exact: true,
-            },
-            {
+            }, {
+                path: '/admin',
+                component: AdminView,
+                async: true,
+                exact: true,
+            }, {
                 path: '/group/:id',
                 component: GroupView,
                 async: true,
                 exact: true,
-            },
-            {
+            }, {
                 path: '/',
                 component: Leaderboard,
                 exact: true,

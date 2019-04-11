@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import io from 'socket.io-client';
 
 import { State } from '../../store/reducers';
 import styles from './ScoreSubmission.module.css';
@@ -75,4 +74,6 @@ const mapStateToProps = (state: State) => {
     }
 }
 
-export default withLogin(connect(mapStateToProps)(ScoreSubmission));
+export default withLogin(
+    connect(mapStateToProps)(ScoreSubmission),
+    '/posts');

@@ -1,0 +1,20 @@
+.Container {
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.Row {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ConfigInfo {
+    width: 75%;
+}
+
+.ConfigControl {
+    width: 25%;
+}

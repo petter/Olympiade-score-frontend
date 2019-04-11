@@ -28,7 +28,7 @@ const Leaderboard = (props: LeaderboardProps) => {
 
     return (
         <div className={styles.Container}>
-            <h1 className={styles.LeaderboardTitle}>IFI Battle Royale</h1>
+            <h1 className={styles.LeaderboardTitle}>Olympiade 2019</h1>
             <div className={styles.Rows}>
                 {rows}
             </div>

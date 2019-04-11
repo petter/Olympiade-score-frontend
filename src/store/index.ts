@@ -9,7 +9,7 @@ export const configureStore = () => {
         rootReducer,
         compose(
             applyMiddleware(thunk, createLogger()),
-            DevTools.instrument()
+            DevTools.instrument(),
         )
     );
 
