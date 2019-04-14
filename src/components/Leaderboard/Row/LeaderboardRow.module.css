@@ -5,44 +5,19 @@
     align-items: center;
     margin-bottom: .5rem;
     font-size: 1rem;
-    background-color: #333;
     width: 95%;
 }
 
-.Row:first-child {
-    border: 2px solid var(--secondary-text);
-}
-
-.Row:nth-child(1),
-.Row:nth-child(2),
-.Row:nth-child(3) {
-    padding: 1rem;
-    font-size: 1.5rem;
-    background-color: var(--secondary-color);
-    width: 100%;
-}
-
-
-.Row:nth-child(1) .Position,
-.Row:nth-child(2) .Position,
-.Row:nth-child(3) .Position {
-    width: 3rem;
-    height: 3rem;
-    font-size: 1.5rem;
-}   
-
 .Position {
-    width: 2rem;
-    height: 2rem;
-    font-size: 1rem;
+    width: 2em;
+    height: 2em;
+    font-size: 1em;
     font-weight: bold;
-    background-color: var(--secondary-text-color);
-    color: var(--secondary-color);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 1rem;
+    margin-right: 1em;
     text-shadow: 2px 2px rgba(0, 0, 0, 0.25);
 }
 

@@ -13,6 +13,7 @@ import styles from './Root.module.css';
 import { GroupState } from '../../store/reducers/groups';
 
 import RouteWithSubRoutes from '../../hoc/RouteWithSubRoutes/RouteWithSubRoutes';
+import { IThemeStateItem } from '../../store/reducers/themes';
 
 const ScoreSubmission = React.lazy(() => import('../../components/ScoreSubmission/ScoreSubmission'));
 const GroupView = React.lazy(() => import('../../components/GroupView/GroupView'));
@@ -33,14 +34,16 @@ class Root extends Component<RootProps> {
         socket.emit('group_request', (groups: GroupState[]) => this.props.setGroups(groups));
         this.setState({ socket: socket });
 
-        // Simulate scores
-        // setInterval(() => this.props.addScore(Math.floor(Math.random() * 60).toString(), 100), 2000);
-
     }
 
 
 
     render() {
+
+        // Style body
+        document.body.style.backgroundColor = this.props.theme.background;
+        document.body.style.color = this.props.theme.backgroundText;
+
         const routes = [
             {
                 path: '/submit',
@@ -63,7 +66,6 @@ class Root extends Component<RootProps> {
                 exact: true,
             },
         ]
-
         return (
             <>
                 <div className={styles.Container}>
@@ -76,7 +78,14 @@ class Root extends Component<RootProps> {
                 </Switch>
                 </div>
 
-                <ToastContainer />
+                <ToastContainer
+                    closeOnClick={true}
+                    pauseOnFocusLoss={false}
+                    autoClose={5000}
+                    hideProgressBar
+                    position="top-right"
+                    closeButton={false}
+                />
                 <DevTools />
             </>
         );
@@ -88,11 +97,13 @@ interface RootProps {
     setScore(id: string, value: number): void;
     addScore(id: string, value: number): void;
     groups: GroupState[];
+    theme: IThemeStateItem;
 }
 
 const mapStateToProps = (state: State) => {
     return {
-        groups: state.groups
+        groups: state.groups,
+        theme: state.themes.themes[state.themes.active],
     }
 }
 

@@ -21,6 +21,7 @@
         "@types/socket.io-client": "^1.4.32",
         "@types/webpack-env": "^1.13.9",
         "babel-plugin-emotion": "^10.0.9",
+        "glamor": "^2.20.40",
         "react": "^16.8.4",
         "react-dom": "^16.8.4",
         "react-flip-move": "^3.0.3",

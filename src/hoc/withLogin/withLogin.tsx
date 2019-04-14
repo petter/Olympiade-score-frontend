@@ -4,6 +4,8 @@ import toast from '../../utils/toast/toast';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import DefaultLoader from '../../components/UI/DefaultLoader/DefaultLoader';
+import Container from '../../components/UI/Container/Container';
+import styles from './withLogin.module.css';
 
 
 const withLogin = <P extends object>(WrappedComponent: ComponentType<P>, socketPath = '/') =>
@@ -35,7 +37,7 @@ const withLogin = <P extends object>(WrappedComponent: ComponentType<P>, socketP
                     toast.success('Hei, ' + userVal.name + '!');
                 } else {
                     this.setState({ submitted: false });
-                    toast.success('Incorrect login');
+                    toast.error('Feil login.');
                 }
             });
         }
@@ -43,10 +45,13 @@ const withLogin = <P extends object>(WrappedComponent: ComponentType<P>, socketP
         render = () => {
 
             const logIn = (
-                <form onSubmit={this.logIn}>
-                    <Input value={this.state.fieldVal} onChange={(event) => this.setState({ fieldVal: event.target.value })} />
-                    <Button>Logg inn</Button>
-                </form>
+                <div className={styles.FormContainer}>
+                    <h2>Login</h2>
+                    <form onSubmit={this.logIn} className={styles.Form}>
+                        <Input value={this.state.fieldVal} onChange={(event) => this.setState({ fieldVal: event.target.value })} />
+                        <Button>Logg inn</Button>
+                    </form>
+                </div>
             );
 
             return this.state.submitted ? (this.state.loggedIn ? (<WrappedComponent {...this.props as P} socket={this.socket} />) : <DefaultLoader />) : logIn;
