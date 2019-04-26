@@ -71,6 +71,7 @@ interface ScoreSubmissionState {
 const mapStateToProps = (state: State) => {
     return {
         groups: state.groups,
+        theme: state.themes.themes[state.themes.active],
     }
 }
 

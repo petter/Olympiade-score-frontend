@@ -6,8 +6,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  background-color: var(--main-color);
 }
 
 * {
@@ -17,16 +15,4 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-:root {
-    --main-color: var(--color-blackboard);
-    --main-text-color: var(--color-grain);
-    --secondary-color: var(--color-oxblood);
-    --secondary-text-color: var(--color-tan);
-
-    --color-blackboard: #565656;
-    --color-grain: #d7cec7;
-    --color-oxblood: #76323f;
-    --color-tan: #c09f80;
 }
