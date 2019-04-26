@@ -1,5 +1,4 @@
 import { toast, ToastContent, ToastOptions } from 'react-toastify';;
-import styles from './toast.module.css';
 import { css } from 'glamor';
 import store from '../../store';
 import { State } from '../../store/reducers';
