@@ -1,15 +1,15 @@
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
-let url = '';
+let url = "";
 
-if (process.env.NODE_ENV === 'production') {
-    url = 'http://158.39.48.32';
+if (process.env.NODE_ENV === "production") {
+  url = "";
 } else {
-    url = 'http://localhost:8080'
+  url = "http://localhost:8080";
 }
 
-const socket = (baseUrl = '/') => {
-    return io(url + baseUrl);
-}
+const socket = (baseUrl = "/") => {
+  return io(url + baseUrl);
+};
 
 export default socket;
