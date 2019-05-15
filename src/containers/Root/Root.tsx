@@ -74,9 +74,16 @@ class Root extends Component<RootProps> {
         exact: true
       },
       {
+        path: "/static",
+        component: Leaderboard,
+        exact: true,
+        props: { animTime: 0 }
+      },
+      {
         path: "/",
         component: Leaderboard,
-        exact: true
+        exact: true,
+        props: { animTime: 500 }
       }
     ];
     return (
