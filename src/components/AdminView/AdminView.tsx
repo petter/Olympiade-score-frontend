@@ -103,4 +103,4 @@ interface IConfig<T> {
   value: T;
 }
 
-export default withLogin(AdminView, "/admin");
+export default withLogin(AdminView, ["admin"]);

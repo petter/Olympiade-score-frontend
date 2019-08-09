@@ -39,8 +39,8 @@ class Root extends Component<RootProps> {
     );
     socket.on(
       "group_score",
-      ({ group, points }: { group: string; points: number }) =>
-        this.props.addScore(group, points)
+      ({ group, score }: { group: string; score: number }) =>
+        this.props.setScore(group, score)
     );
     //socket.emit('groups', this.props.groups); // Used to provide backend with dummydata
     socket.emit("group_request", (groups: GroupState[]) =>
@@ -62,13 +62,15 @@ class Root extends Component<RootProps> {
         path: "/submit",
         component: ScoreSubmission,
         async: true,
-        exact: true
+        exact: true,
+        authorizedRoles: ["admin", "forening"]
       },
       {
         path: "/admin",
         component: AdminView,
         async: true,
-        exact: true
+        exact: true,
+        authorizedRoles: ["admin"]
       },
       {
         path: "/group/:id",
@@ -117,7 +119,6 @@ class Root extends Component<RootProps> {
 interface RootProps {
   setGroups(groups: GroupState[]): void;
   setScore(id: string, value: number): void;
-  addScore(id: string, value: number): void;
   groups: GroupState[];
   theme: IThemeStateItem;
 }
@@ -134,9 +135,7 @@ const mapDispatchToProps = (dispatch: Function) => {
     setGroups: (groups: GroupState[]) =>
       dispatch(groupActions.setGroups(groups)),
     setScore: (id: string, value: number) =>
-      dispatch(groupActions.setScore({ id: id, value: value })),
-    addScore: (id: string, value: number) =>
-      dispatch(groupActions.addScore({ id: id, value: value }))
+      dispatch(groupActions.setScore({ id: id, value: value }))
   };
 };
 
