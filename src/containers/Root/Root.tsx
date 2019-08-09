@@ -46,6 +46,9 @@ class Root extends Component<RootProps> {
     socket.emit("group_request", (groups: GroupState[]) =>
       this.props.setGroups(groups)
     );
+    socket.on("group_new", (group: GroupState) =>
+      this.props.setGroups([...this.props.groups, group])
+    );
     this.setState({ socket: socket });
   };
 
