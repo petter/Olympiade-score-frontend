@@ -5,7 +5,6 @@ import toast from '../../utils/toast/toast';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import DefaultLoader from '../../components/UI/DefaultLoader/DefaultLoader';
-import Container from '../../components/UI/Container/Container';
 import styles from './withLogin.module.css';
 
 const withLogin = <P extends object>(
@@ -30,9 +29,13 @@ const withLogin = <P extends object>(
           authorizedRoles: authorizedRoles,
         })
         .then(res => {
+          toast.success(`Velkommen, ${res.data.name}! 😍`);
           this.setState({ loggedIn: true });
         })
-        .catch(err => this.setState({ submitted: false }));
+        .catch(() => {
+          toast.success(`'${value} er ikke gyldig. Prøv igjen.'`);
+          this.setState({ submitted: false });
+        });
     };
 
     render = () => {
