@@ -40,6 +40,8 @@ const reducer = (state = initialState, action: AdminActions) => {
       };
     case 'admin/updateForening':
       return updateForening(state, action.payload);
+    default:
+      return state;
   }
 };
 

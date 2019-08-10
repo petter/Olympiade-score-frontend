@@ -8,6 +8,14 @@ import io from '../../utils/socket/socket';
 import axios from '../../utils/axios';
 import { Input, Modal } from '@material-ui/core';
 import { Forening } from '../../store/reducers/admin';
+import { connect } from 'react-redux';
+import { State } from '../../store/reducers';
+import { Dispatch } from 'redux';
+import {
+  setForeninger,
+  updateForening,
+  addForening,
+} from '../../store/actions/admin';
 
 const socket = io('/admin');
 
@@ -164,26 +172,16 @@ const ForeningTable = ({
   );
 };
 
-const AdminView = (props: AdminViewProps) => {
-  const [foreninger, setForeninger] = useState<Forening[]>([]);
-  console.log('render', foreninger);
+const AdminView = ({
+  foreninger,
+  updateForening,
+  setForeninger,
+  addForening,
+}: AdminViewProps) => {
   useEffect(() => {
-    socket.emit('forening_request', (data: Forening[]) => {
-      setForeninger(data);
-    });
-
-    socket.on('forening_update', (val: Forening) => {
-      console.log('forening_update');
-      console.log(foreninger, val);
-      const i = foreninger.findIndex(({ id }) => id === val.id);
-      if (i === -1) setForeninger([...foreninger, val]);
-      else {
-        const oppdatterteForeninger = [...foreninger];
-        oppdatterteForeninger[i] = val;
-        console.log('Oppdaterte foreninger: ', oppdatterteForeninger);
-        setForeninger(oppdatterteForeninger);
-      }
-    });
+    socket.emit('forening_request', setForeninger);
+    socket.on('forening_update', updateForening);
+    socket.on('forening_new', addForening);
   }, []);
 
   return (
@@ -202,6 +200,41 @@ const AdminView = (props: AdminViewProps) => {
   );
 };
 
-interface AdminViewProps extends RouteComponentProps {}
+interface StateProps {
+  foreninger: Forening[];
+}
 
-export default withLogin(AdminView, ['admin']);
+interface DispatchProps {
+  setForeninger: (foreninger: Forening[]) => void;
+  updateForening: (forening: Forening) => void;
+  addForening: (forening: Forening) => void;
+}
+
+interface OwnProps {}
+
+type AdminViewProps = StateProps &
+  DispatchProps &
+  OwnProps &
+  RouteComponentProps;
+
+const mapStateToProps = (state: State): StateProps => {
+  return {
+    foreninger: state.admin.foreninger,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => {
+  return {
+    setForeninger: foreninger => dispatch(setForeninger(foreninger)),
+    updateForening: forening => dispatch(updateForening(forening)),
+    addForening: forening => dispatch(addForening(forening)),
+  };
+};
+
+export default withLogin(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AdminView),
+  ['admin']
+);
