@@ -9,6 +9,11 @@ export interface Forening {
   updatedAt: Date;
 }
 
+export interface Faddergruppe {
+  id: number;
+  name: string;
+}
+
 export interface AdminState {
   foreninger: Forening[];
 }
