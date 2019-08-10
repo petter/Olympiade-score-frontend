@@ -1,26 +1,26 @@
-import React, { Component } from "react";
-import Switch from "@material-ui/core/Switch";
+import React, { Component } from 'react';
+import Switch from '@material-ui/core/Switch';
 
-import withLogin from "../../hoc/withLogin/withLogin";
-import DefaultLoader from "../UI/DefaultLoader/DefaultLoader";
-import styles from "./AdminView.module.css";
-import { RouteComponentProps } from "react-router";
-import toast from "../../utils/toast/toast";
+import withLogin from '../../hoc/withLogin/withLogin';
+import DefaultLoader from '../UI/DefaultLoader/DefaultLoader';
+import styles from './AdminView.module.css';
+import { RouteComponentProps } from 'react-router';
+import toast from '../../utils/toast/toast';
 
 class AdminView extends Component<AdminViewProps> {
   state: AdminViewState = {
     loading: false,
-    configs: null
+    configs: null,
   };
 
   componentDidMount = () => {
     const { socket } = this.props;
-    socket.emit("get_configs", (configs: IConfig<any>[]) => {
+    socket.emit('get_configs', (configs: IConfig<any>[]) => {
       this.setState({ configs: configs });
     });
 
     socket.on(
-      "updated_config",
+      'updated_config',
       ({ config, value }: { config: string; value: any }) => {
         this.setState((state: AdminViewState) => {
           if (state.configs === null) return {};
@@ -40,9 +40,9 @@ class AdminView extends Component<AdminViewProps> {
       const updatedConfigs = [...state.configs];
       updatedConfigs[index] = { ...updatedConfigs[index], value };
 
-      this.props.socket.emit("change_config", {
+      this.props.socket.emit('change_config', {
         config: updatedConfigs[index].id,
-        value: value
+        value: value,
       });
       return { configs: updatedConfigs };
     });
@@ -50,7 +50,7 @@ class AdminView extends Component<AdminViewProps> {
 
   getControl = (config: IConfig<any>, index: number) => {
     switch (config.control) {
-      case "switch":
+      case 'switch':
         return (
           <Switch
             checked={config.value}
@@ -99,8 +99,8 @@ interface IConfig<T> {
   name: string;
   id: string;
   description: string;
-  control: "switch";
+  control: 'switch';
   value: T;
 }
 
-export default withLogin(AdminView, ["admin"]);
+export default withLogin(AdminView, ['admin']);

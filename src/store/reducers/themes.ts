@@ -1,16 +1,16 @@
-import { ThemeActions } from "../actions/themes";
+import { ThemeActions } from '../actions/themes';
 
 const createThemeItem = (
   primary: string,
   primaryText: string,
   secondary: string,
   secondaryText: string,
-  background: string = "#ffffff",
-  backgroundText: string = "#000000",
-  surface: string = "#ffffff",
-  surfaceText: string = "#000000",
-  error: string = "#c51111",
-  errorText: string = "#ffffff"
+  background: string = '#ffffff',
+  backgroundText: string = '#000000',
+  surface: string = '#ffffff',
+  surfaceText: string = '#000000',
+  error: string = '#c51111',
+  errorText: string = '#ffffff'
 ): IThemeStateItem => {
   return {
     primary,
@@ -22,29 +22,29 @@ const createThemeItem = (
     surface,
     surfaceText,
     error,
-    errorText
+    errorText,
   };
 };
 
 const initialState: IThemeState = {
-  active: "vivid",
+  active: 'vivid',
   themes: {
     vivid: createThemeItem(
-      "#D15663",
-      "#FFFCF9",
-      "#FCD581",
-      "#352D39",
-      "#FFFCF9",
-      "black",
-      "#352D39",
-      "#FFFCF9"
-    )
-  }
+      '#D15663',
+      '#FFFCF9',
+      '#FCD581',
+      '#352D39',
+      '#FFFCF9',
+      'black',
+      '#352D39',
+      '#FFFCF9'
+    ),
+  },
 };
 
 const reducer = (state = initialState, action: ThemeActions) => {
   switch (action.type) {
-    case "theme/setTheme":
+    case 'theme/setTheme':
       return { ...state, active: action.payload };
     default:
       return state;

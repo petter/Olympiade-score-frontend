@@ -56,7 +56,7 @@ const withLogin = <P extends object>(
 
       return this.state.submitted ? (
         this.state.loggedIn ? (
-          <WrappedComponent {...this.props as P} socket={this.socket} />
+          <WrappedComponent {...(this.props as P)} socket={this.socket} />
         ) : (
           <DefaultLoader />
         )

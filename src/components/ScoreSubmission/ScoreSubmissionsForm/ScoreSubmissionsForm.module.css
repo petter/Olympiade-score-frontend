@@ -1,12 +1,12 @@
 .Form {
-    width: 100%;
+  width: 100%;
 }
 
 .Label {
-    font-size: 1.2em;
+  font-size: 1.2em;
 }
 
 .Select {
-    width: 100%;
-    margin: 1rem 0;
+  width: 100%;
+  margin: 1rem 0;
 }
