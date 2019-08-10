@@ -1,4 +1,5 @@
 import { GroupActions } from './groups';
+import { AdminActions } from './admin';
 
 export interface PayloadedAction<TType, TPayload> {
   type: TType;
@@ -31,4 +32,4 @@ export const createAction = <TAction extends Action<TAction['type']>>(
   });
 };
 
-export type Actions = GroupActions;
+export type Actions = GroupActions | AdminActions;

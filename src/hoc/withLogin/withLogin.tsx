@@ -33,7 +33,7 @@ const withLogin = <P extends object>(
           this.setState({ loggedIn: true });
         })
         .catch(() => {
-          toast.success(`'${value} er ikke gyldig. Prøv igjen.'`);
+          toast.success(`'${value}' er ikke gyldig. Prøv igjen.`);
           this.setState({ submitted: false });
         });
     };

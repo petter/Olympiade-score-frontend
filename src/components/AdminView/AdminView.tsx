@@ -1,16 +1,13 @@
 import React, { Component, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Switch from '@material-ui/core/Switch';
 
 import withLogin from '../../hoc/withLogin/withLogin';
-import DefaultLoader from '../UI/DefaultLoader/DefaultLoader';
-import styles from './AdminView.module.css';
 import { RouteComponentProps } from 'react-router';
 import toast from '../../utils/toast/toast';
 import io from '../../utils/socket/socket';
 import axios from '../../utils/axios';
 import { Input, Modal } from '@material-ui/core';
-import Select from 'react-select/lib/Select';
+import { Forening } from '../../store/reducers/admin';
 
 const socket = io('/admin');
 
@@ -29,15 +26,6 @@ const TableRow = styled.div`
   align-items: center;
   border-bottom: 1px solid #ccc;
 `;
-
-interface Forening {
-  id: number;
-  name: string;
-  role: string;
-  password: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 interface ForeningProps {
   foreninger: Forening[];
@@ -178,16 +166,24 @@ const ForeningTable = ({
 
 const AdminView = (props: AdminViewProps) => {
   const [foreninger, setForeninger] = useState<Forening[]>([]);
-
+  console.log('render', foreninger);
   useEffect(() => {
-    axios
-      .get('/api/admin/foreninger')
-      .then(res => {
-        setForeninger(res.data);
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    socket.emit('forening_request', (data: Forening[]) => {
+      setForeninger(data);
+    });
+
+    socket.on('forening_update', (val: Forening) => {
+      console.log('forening_update');
+      console.log(foreninger, val);
+      const i = foreninger.findIndex(({ id }) => id === val.id);
+      if (i === -1) setForeninger([...foreninger, val]);
+      else {
+        const oppdatterteForeninger = [...foreninger];
+        oppdatterteForeninger[i] = val;
+        console.log('Oppdaterte foreninger: ', oppdatterteForeninger);
+        setForeninger(oppdatterteForeninger);
+      }
+    });
   }, []);
 
   return (
@@ -196,115 +192,16 @@ const AdminView = (props: AdminViewProps) => {
       <ForeningTable
         foreninger={foreninger}
         onSubmit={forening => {
-          axios
-            .put('/api/admin/forening', forening)
-            .then(res => {
-              if (!res.data.message) {
-                const i = foreninger.findIndex(({ id }) => id === res.data.id);
-                const nyForeninger = [...foreninger];
-                nyForeninger[i] = res.data;
-                if (i !== -1) setForeninger(nyForeninger);
-              }
-            })
-            .catch(err => {
-              console.error(err);
-            });
+          axios.put('/api/admin/forening', forening);
         }}
         addForening={(data: { name: string; role: string }) => {
-          axios.post('/api/admin/forening', data).then(res => {
-            if (res.data.message) return;
-            setForeninger([...foreninger, res.data]);
-          });
+          axios.post('/api/admin/forening', data);
         }}
       />
     </div>
   );
 };
 
-// class AdminView extends Component<AdminViewProps> {
-//   state: AdminViewState = {
-//     loading: false,
-//     configs: null,
-//   };
-
-//   componentDidMount = () => {
-//     // socket.emit('get_configs', (configs: IConfig<any>[]) => {
-//     //   this.setState({ configs: configs });
-//     // });
-//     // socket.on(
-//     //   'updated_config',
-//     //   ({ config, value }: { config: string; value: any }) => {
-//     //     this.setState((state: AdminViewState) => {
-//     //       if (state.configs === null) return {};
-//     //       const updatedConfigs = state.configs.map(el =>
-//     //         el.id === config ? { ...el, value: value } : el
-//     //       );
-//     //       return { configs: updatedConfigs };
-//     //     });
-//     //   }
-//     // );
-//   };
-
-//   updateConfig = (index: number, value: any) => {
-//     // this.setState((state: AdminViewState) => {
-//     //   if (state.configs === null) return { configs: state.configs };
-//     //   const updatedConfigs = [...state.configs];
-//     //   updatedConfigs[index] = { ...updatedConfigs[index], value };
-//     //   this.props.socket.emit('change_config', {
-//     //     config: updatedConfigs[index].id,
-//     //     value: value,
-//     //   });
-//     //   return { configs: updatedConfigs };
-//     // });
-//   };
-
-//   getControl = (config: IConfig<any>, index: number) => {
-//     switch (config.control) {
-//       case 'switch':
-//         return (
-//           <Switch
-//             checked={config.value}
-//             onChange={(_, checked) => this.updateConfig(index, checked)}
-//           />
-//         );
-//     }
-//   };
-
-//   render() {
-//     let configContent: JSX.Element | JSX.Element[] = <DefaultLoader />;
-//     if (this.state.configs !== null) {
-//       configContent = this.state.configs.map((el, i) => {
-//         const control = this.getControl(el, i);
-//         return (
-//           <div className={styles.Row} key={el.id}>
-//             <div className={styles.ConfigInfo}>
-//               <h3>{el.name}</h3>
-//               <p>{el.description}</p>
-//             </div>
-//             <div className={styles.ConfigControl}>{control}</div>
-//           </div>
-//         );
-//       });
-//     }
-
-//     return (
-//       <div>
-//         <h1>Configs</h1>
-//       </div>
-//     );
-//   }
-// }
-
 interface AdminViewProps extends RouteComponentProps {}
-
-interface AdminViewState {}
-
-interface IConfig<T> {
-  name: string;
-  id: string;
-  description: string;
-  control: 'switch';
-  value: T;
-}
 
 export default withLogin(AdminView, ['admin']);
