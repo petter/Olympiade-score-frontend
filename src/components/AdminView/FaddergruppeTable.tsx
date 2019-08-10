@@ -122,7 +122,9 @@ const FaddergruppeTable = ({ faddergrupper }: FaddergruppeProps) => {
         defaultSorted={[{ id: 'id', desc: false }]}
       />
 
-      <button onClick={() => setShowAddModal(true)}>Legg til forening</button>
+      <button onClick={() => setShowAddModal(true)}>
+        Legg til faddergruppe
+      </button>
       <Modal open={showAddModal}>
         <NyFaddergruppeModal onModalClose={() => setShowAddModal(false)} />
       </Modal>
