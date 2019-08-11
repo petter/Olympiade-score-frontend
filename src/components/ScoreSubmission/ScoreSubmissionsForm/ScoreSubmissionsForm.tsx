@@ -26,7 +26,7 @@ const ScoreSubmissionsForm: FunctionComponent<
   const groupOptions = props.groups.map(el => {
     return {
       value: el.id,
-      label: el.name + '(' + el.id + ')',
+      label: el.name,
     };
   });
 
