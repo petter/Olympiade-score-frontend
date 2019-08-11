@@ -21,6 +21,16 @@ import FaddergruppeTable from './FaddergruppeTable';
 
 const socket = io('/admin');
 
+const nyRundeHandler = () => {
+  const ja = confirm(
+    'Er du sikker på at du vil starte ny runde? Dette vil resette score til alle grupper.'
+  );
+
+  if (ja) {
+    axios.get('/api/admin/runde/start-ny');
+  }
+};
+
 const AdminView = ({
   foreninger,
   faddergrupper,
@@ -37,8 +47,12 @@ const AdminView = ({
   return (
     <div>
       <h1>Configs</h1>
+
       <ForeningTable foreninger={foreninger} />
       <FaddergruppeTable faddergrupper={faddergrupper} />
+
+      <h2>Stary ny runde</h2>
+      <button onClick={nyRundeHandler}>Ny runde</button>
     </div>
   );
 };

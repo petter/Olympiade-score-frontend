@@ -42,8 +42,10 @@ class Root extends Component<RootProps> {
       ({ group, score }: { group: string; score: number }) =>
         this.props.setScore(group, score)
     );
-    //socket.emit('groups', this.props.groups); // Used to provide backend with dummydata
     socket.emit('group_request', (groups: GroupState[]) =>
+      this.props.setGroups(groups)
+    );
+    socket.on('group_set', (groups: GroupState[]) =>
       this.props.setGroups(groups)
     );
     socket.on('group_new', (group: GroupState) =>
