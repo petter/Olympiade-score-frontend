@@ -7,7 +7,7 @@ ssh ubuntu@158.39.48.32 <<EOF
   git pull
   yarn install
   yarn build
-  cp -rf build ../olympiade_backend/src/client 
+  cp -rf build ../olympiade_backend/lib/client 
   pm2 restart all
   exit
 EOF
