@@ -1,14 +1,14 @@
-import io from "socket.io-client";
+import io from 'socket.io-client';
 
-let url = "";
+let url = '';
 
-if (process.env.NODE_ENV === "production") {
-  url = "";
+if (process.env.NODE_ENV === 'production') {
+  url = '';
 } else {
-  url = "http://localhost:8080";
+  url = 'http://localhost:8080';
 }
 
-const socket = (baseUrl = "/") => {
+const socket = (baseUrl = '/') => {
   return io(url + baseUrl);
 };
 

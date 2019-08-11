@@ -1,106 +1,102 @@
-import React, { Component } from "react";
-import Switch from "@material-ui/core/Switch";
+import React, { Component, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
-import withLogin from "../../hoc/withLogin/withLogin";
-import DefaultLoader from "../UI/DefaultLoader/DefaultLoader";
-import styles from "./AdminView.module.css";
-import { RouteComponentProps } from "react-router";
-import toast from "../../utils/toast/toast";
+import withLogin from '../../hoc/withLogin/withLogin';
+import { RouteComponentProps } from 'react-router';
+import toast from '../../utils/toast/toast';
+import io from '../../utils/socket/socket';
+import axios from '../../utils/axios';
+import { Input, Modal } from '@material-ui/core';
+import { Forening, Faddergruppe } from '../../store/reducers/admin';
+import { connect } from 'react-redux';
+import { State } from '../../store/reducers';
+import { Dispatch } from 'redux';
+import {
+  setForeninger,
+  updateForening,
+  addForening,
+} from '../../store/actions/admin';
+import ForeningTable from './ForeningTable';
+import FaddergruppeTable from './FaddergruppeTable';
 
-class AdminView extends Component<AdminViewProps> {
-  state: AdminViewState = {
-    loading: false,
-    configs: null
-  };
+const socket = io('/admin');
 
-  componentDidMount = () => {
-    const { socket } = this.props;
-    socket.emit("get_configs", (configs: IConfig<any>[]) => {
-      this.setState({ configs: configs });
-    });
+const nyRundeHandler = () => {
+  const ja = confirm(
+    'Er du sikker på at du vil starte ny runde? Dette vil resette score til alle grupper.'
+  );
 
-    socket.on(
-      "updated_config",
-      ({ config, value }: { config: string; value: any }) => {
-        this.setState((state: AdminViewState) => {
-          if (state.configs === null) return {};
-          const updatedConfigs = state.configs.map(el =>
-            el.id === config ? { ...el, value: value } : el
-          );
-          return { configs: updatedConfigs };
-        });
-      }
-    );
-  };
-
-  updateConfig = (index: number, value: any) => {
-    this.setState((state: AdminViewState) => {
-      if (state.configs === null) return { configs: state.configs };
-
-      const updatedConfigs = [...state.configs];
-      updatedConfigs[index] = { ...updatedConfigs[index], value };
-
-      this.props.socket.emit("change_config", {
-        config: updatedConfigs[index].id,
-        value: value
-      });
-      return { configs: updatedConfigs };
-    });
-  };
-
-  getControl = (config: IConfig<any>, index: number) => {
-    switch (config.control) {
-      case "switch":
-        return (
-          <Switch
-            checked={config.value}
-            onChange={(_, checked) => this.updateConfig(index, checked)}
-          />
-        );
-    }
-  };
-
-  render() {
-    let configContent: JSX.Element | JSX.Element[] = <DefaultLoader />;
-    if (this.state.configs !== null) {
-      configContent = this.state.configs.map((el, i) => {
-        const control = this.getControl(el, i);
-        return (
-          <div className={styles.Row} key={el.id}>
-            <div className={styles.ConfigInfo}>
-              <h3>{el.name}</h3>
-              <p>{el.description}</p>
-            </div>
-            <div className={styles.ConfigControl}>{control}</div>
-          </div>
-        );
-      });
-    }
-
-    return (
-      <div>
-        <h1>Configs</h1>
-        {configContent}
-      </div>
-    );
+  if (ja) {
+    axios.get('/api/admin/runde/start-ny');
   }
+};
+
+const AdminView = ({
+  foreninger,
+  faddergrupper,
+  updateForening,
+  setForeninger,
+  addForening,
+}: AdminViewProps) => {
+  useEffect(() => {
+    socket.emit('forening_request', setForeninger);
+    socket.on('forening_update', updateForening);
+    socket.on('forening_new', addForening);
+  }, []);
+
+  return (
+    <div>
+      <h1>Configs</h1>
+
+      <ForeningTable foreninger={foreninger} />
+      <FaddergruppeTable faddergrupper={faddergrupper} />
+
+      <h2>Stary ny runde</h2>
+      <button onClick={nyRundeHandler}>Ny runde</button>
+    </div>
+  );
+};
+
+interface StateProps {
+  foreninger: Forening[];
+  faddergrupper: Faddergruppe[];
 }
 
-interface AdminViewProps extends RouteComponentProps {
-  socket: SocketIOClient.Socket;
+interface DispatchProps {
+  setForeninger: (foreninger: Forening[]) => void;
+  updateForening: (forening: Forening) => void;
+  addForening: (forening: Forening) => void;
 }
 
-interface AdminViewState {
-  loading: boolean;
-  configs: IConfig<any>[] | null;
-}
+interface OwnProps {}
 
-interface IConfig<T> {
-  name: string;
-  id: string;
-  description: string;
-  control: "switch";
-  value: T;
-}
+type AdminViewProps = StateProps &
+  DispatchProps &
+  OwnProps &
+  RouteComponentProps;
 
-export default withLogin(AdminView, "/admin");
+const mapStateToProps = (state: State): StateProps => {
+  return {
+    foreninger: state.admin.foreninger,
+    faddergrupper: state.groups.map(({ name, id }) => ({
+      id: parseInt(id),
+      name,
+    })),
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => {
+  return {
+    setForeninger: foreninger => dispatch(setForeninger(foreninger)),
+    updateForening: forening => dispatch(updateForening(forening)),
+    addForening: forening => dispatch(addForening(forening)),
+  };
+};
+
+export default withLogin(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AdminView),
+  ['admin']
+);

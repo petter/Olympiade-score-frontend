@@ -8,12 +8,13 @@ import Root from './containers/Root/Root';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <BrowserRouter>
-        <Provider store={store}>
-            <Root />
-        </Provider>
-    </BrowserRouter>,
-    document.getElementById('root'));
+  <BrowserRouter>
+    <Provider store={store}>
+      <Root />
+    </Provider>
+  </BrowserRouter>,
+  document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

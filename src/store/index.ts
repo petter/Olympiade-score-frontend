@@ -5,16 +5,16 @@ import rootReducer from './reducers';
 import DevTools from '../containers/DevTools/DevTools';
 
 export const configureStore = () => {
-    const store = createStore(
-        rootReducer,
-        compose(
-            applyMiddleware(thunk, createLogger()),
-            DevTools.instrument(),
-        )
-    );
+  const store = createStore(
+    rootReducer,
+    compose(
+      applyMiddleware(thunk, createLogger()),
+      DevTools.instrument()
+    )
+  );
 
-    return store;
-}
+  return store;
+};
 
 const store = configureStore();
 

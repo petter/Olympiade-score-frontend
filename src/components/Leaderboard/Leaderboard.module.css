@@ -1,12 +1,12 @@
 .LeaderboardTitle {
-    font-size: 3rem;
+  font-size: 3rem;
 }
 
 .Rows {
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    position: relative;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
 }

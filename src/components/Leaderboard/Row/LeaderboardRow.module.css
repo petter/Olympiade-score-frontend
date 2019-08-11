@@ -1,30 +1,30 @@
 .Row {
-    padding: .5rem 1rem;
-    border-radius: .5rem;
-    display: flex;
-    align-items: center;
-    margin-bottom: .5rem;
-    font-size: 1rem;
-    width: 95%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  width: 95%;
 }
 
 .Position {
-    width: 2em;
-    height: 2em;
-    font-size: 1em;
-    font-weight: bold;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 1em;
-    text-shadow: 2px 2px rgba(0, 0, 0, 0.25);
+  width: 2em;
+  height: 2em;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1em;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.25);
 }
 
 .Name {
-    flex: 9;
+  flex: 9;
 }
 
 .Score {
-    flex: 1;
+  flex: 1;
 }

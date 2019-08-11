@@ -1,50 +1,55 @@
-import React, { Component, Suspense } from "react";
-import { connect } from "react-redux";
-import { Switch, Route, Link, RouteComponentProps } from "react-router-dom";
-import io from "../../utils/socket/socket";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { Component, Suspense } from 'react';
+import { connect } from 'react-redux';
+import { Switch, Route, Link, RouteComponentProps } from 'react-router-dom';
+import io from '../../utils/socket/socket';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import { State } from "../../store/reducers";
-import * as groupActions from "../../store/actions/groups";
-import DevTools from "../DevTools/DevTools";
-import Leaderboard from "../../components/Leaderboard/Leaderboard";
-import styles from "./Root.module.css";
-import { GroupState } from "../../store/reducers/groups";
+import { State } from '../../store/reducers';
+import * as groupActions from '../../store/actions/groups';
+import DevTools from '../DevTools/DevTools';
+import Leaderboard from '../../components/Leaderboard/Leaderboard';
+import styles from './Root.module.css';
+import { GroupState } from '../../store/reducers/groups';
 
-import RouteWithSubRoutes from "../../hoc/RouteWithSubRoutes/RouteWithSubRoutes";
-import { IThemeStateItem } from "../../store/reducers/themes";
+import RouteWithSubRoutes from '../../hoc/RouteWithSubRoutes/RouteWithSubRoutes';
+import { IThemeStateItem } from '../../store/reducers/themes';
 
 const ScoreSubmission = React.lazy(() =>
-  import("../../components/ScoreSubmission/ScoreSubmission")
+  import('../../components/ScoreSubmission/ScoreSubmission')
 );
 const GroupView = React.lazy(() =>
-  import("../../components/GroupView/GroupView")
+  import('../../components/GroupView/GroupView')
 );
 const AdminView = React.lazy(() =>
-  import("../../components/AdminView/AdminView")
+  import('../../components/AdminView/AdminView')
 );
 
 class Root extends Component<RootProps> {
   state = {
-    socket: null
+    socket: null,
   };
 
   componentDidMount = () => {
     const socket = io();
-    socket.on("connect", () => console.log("connected"));
-    socket.on("disconnect", () => console.log("disconnected"));
-    socket.on("group_set", (groups: GroupState[]) =>
+    socket.on('connect', () => console.log('connected'));
+    socket.on('disconnect', () => console.log('disconnected'));
+    socket.on('group_set', (groups: GroupState[]) =>
       this.props.setGroups(groups)
     );
     socket.on(
-      "group_score",
-      ({ group, points }: { group: string; points: number }) =>
-        this.props.addScore(group, points)
+      'group_score',
+      ({ group, score }: { group: string; score: number }) =>
+        this.props.setScore(group, score)
     );
-    //socket.emit('groups', this.props.groups); // Used to provide backend with dummydata
-    socket.emit("group_request", (groups: GroupState[]) =>
+    socket.emit('group_request', (groups: GroupState[]) =>
       this.props.setGroups(groups)
+    );
+    socket.on('group_set', (groups: GroupState[]) =>
+      this.props.setGroups(groups)
+    );
+    socket.on('group_new', (group: GroupState) =>
+      this.props.setGroups([...this.props.groups, group])
     );
     this.setState({ socket: socket });
   };
@@ -56,35 +61,37 @@ class Root extends Component<RootProps> {
 
     const routes = [
       {
-        path: "/submit",
+        path: '/submit',
         component: ScoreSubmission,
         async: true,
-        exact: true
+        exact: true,
+        authorizedRoles: ['admin', 'forening'],
       },
       {
-        path: "/admin",
+        path: '/admin',
         component: AdminView,
         async: true,
-        exact: true
+        exact: true,
+        authorizedRoles: ['admin'],
       },
       {
-        path: "/group/:id",
+        path: '/group/:id',
         component: GroupView,
         async: true,
-        exact: true
+        exact: true,
       },
       {
-        path: "/static",
+        path: '/static',
         component: Leaderboard,
         exact: true,
-        props: { animTime: 0 }
+        props: { animTime: 0 },
       },
       {
-        path: "/",
+        path: '/',
         component: Leaderboard,
         exact: true,
-        props: { animTime: 500 }
-      }
+        props: { animTime: 500 },
+      },
     ];
     return (
       <>
@@ -114,7 +121,6 @@ class Root extends Component<RootProps> {
 interface RootProps {
   setGroups(groups: GroupState[]): void;
   setScore(id: string, value: number): void;
-  addScore(id: string, value: number): void;
   groups: GroupState[];
   theme: IThemeStateItem;
 }
@@ -122,7 +128,7 @@ interface RootProps {
 const mapStateToProps = (state: State) => {
   return {
     groups: state.groups,
-    theme: state.themes.themes[state.themes.active]
+    theme: state.themes.themes[state.themes.active],
   };
 };
 
@@ -132,8 +138,6 @@ const mapDispatchToProps = (dispatch: Function) => {
       dispatch(groupActions.setGroups(groups)),
     setScore: (id: string, value: number) =>
       dispatch(groupActions.setScore({ id: id, value: value })),
-    addScore: (id: string, value: number) =>
-      dispatch(groupActions.addScore({ id: id, value: value }))
   };
 };
 
